@@ -1,0 +1,53 @@
+[project]
+name = "garmin-connect-mcp"
+version = "1.0.0"
+description = "Ask Claude about your Garmin workouts, sleep, and health data"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Justin Harkebusch" }]
+keywords = ["garmin", "mcp", "claude", "fitness", "health"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "mcp>=2.0.0",
+    "garminconnect[workout]>=0.3.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+garmin-mcp = "garmin_mcp.server:main"
+garmin-mcp-setup = "garmin_mcp.setup_cli:main"
+
+[project.urls]
+Homepage = "https://github.com/jharkebusch/garmin-connect-mcp"
+Issues = "https://github.com/jharkebusch/garmin-connect-mcp/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/garmin_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
