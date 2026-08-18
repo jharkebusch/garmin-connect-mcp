@@ -89,3 +89,21 @@ class TestMfaPrompt:
         answers = iter(["", "   ", "483920"])
         monkeypatch.setattr("builtins.input", lambda *a: next(answers))
         assert setup_cli.ask_mfa_code() == "483920"
+
+
+class TestMainInterruptions:
+    def test_ctrl_c_exits_calmly(self, monkeypatch, capsys):
+        monkeypatch.setattr(setup_cli, "run", lambda: (_ for _ in ()).throw(KeyboardInterrupt()))
+        try:
+            setup_cli.main()
+        except SystemExit as exit_code:
+            assert exit_code.code == 1
+        assert "Cancelled" in capsys.readouterr().out
+
+    def test_end_of_input_exits_calmly(self, monkeypatch, capsys):
+        monkeypatch.setattr(setup_cli, "run", lambda: (_ for _ in ()).throw(EOFError()))
+        try:
+            setup_cli.main()
+        except SystemExit as exit_code:
+            assert exit_code.code == 1
+        assert "No input was received" in capsys.readouterr().out

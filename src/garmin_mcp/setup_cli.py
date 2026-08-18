@@ -143,7 +143,7 @@ def write_config(path: Path) -> tuple[Path | None, bool]:
     return backup, replaced
 
 
-def main() -> None:
+def run() -> None:
     say()
     rule()
     say("  Garmin Connect for Claude -- setup")
@@ -184,6 +184,18 @@ def main() -> None:
     say('  "Show me my runs from the last two weeks."')
     say('  "What is my training readiness today?"')
     say()
+
+
+def main() -> None:
+    """Entry point that turns Ctrl-C and Ctrl-D into a calm message."""
+    try:
+        run()
+    except KeyboardInterrupt:
+        say("\n\nCancelled. Nothing was changed.")
+        raise SystemExit(1) from None
+    except EOFError:
+        say("\n\nNo input was received, so setup stopped. Nothing was changed.")
+        raise SystemExit(1) from None
 
 
 if __name__ == "__main__":
