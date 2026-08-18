@@ -18,16 +18,15 @@ couple of questions and does the rest.
 
 ## What you need
 
-- A Mac
+- A Mac or a Windows PC
 - The [Claude Desktop app](https://claude.ai/download)
 - A Garmin Connect account with a Garmin watch or device
 
 ---
 
-## Install
+## Install on a Mac
 
-Open the **Terminal** app on your Mac. (Press `Cmd + Space`, type `Terminal`,
-press Enter.)
+Open the **Terminal** app. (Press `Cmd + Space`, type `Terminal`, press Enter.)
 
 Copy this line, paste it into the Terminal window, and press Enter:
 
@@ -47,6 +46,30 @@ When it finishes, **quit Claude Desktop completely** with `Cmd + Q` and open it
 again. Closing the window is not enough.
 
 Then just ask Claude about your Garmin data.
+
+---
+
+## Install on Windows
+
+Open **PowerShell**. (Press the Windows key, type `PowerShell`, press Enter.)
+
+Copy this line, paste it in, and press Enter:
+
+```powershell
+irm https://raw.githubusercontent.com/jharkebusch/garmin-connect-mcp/main/install.ps1 | iex
+```
+
+It does the same three things as the Mac installer.
+
+When it finishes, **quit Claude Desktop completely** and open it again. Closing
+the window leaves it running in the system tray -- right-click the tray icon and
+choose Quit.
+
+To sign in again later, run:
+
+```powershell
+& "$env:USERPROFILE\.garmin-mcp\Scripts\garmin-mcp-setup.exe"
+```
 
 ---
 
@@ -142,20 +165,32 @@ If your Terminal does not recognise that command, use the full path:
 
 ## Uninstalling
 
+On a Mac:
+
 ```bash
 rm -rf ~/.garmin-mcp ~/.garminconnect ~/.local/bin/garmin-mcp-setup
 ```
 
-Then remove the `"garmin"` entry from the `mcpServers` section of
-`~/Library/Application Support/Claude/claude_desktop_config.json`.
+On Windows (PowerShell):
+
+```powershell
+Remove-Item -Recurse -Force "$env:USERPROFILE\.garmin-mcp", "$env:USERPROFILE\.garminconnect"
+```
+
+Then remove the `"garmin"` entry from the `mcpServers` section of your Claude
+Desktop config:
+
+- Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ---
 
 ## Troubleshooting
 
 **Claude does not see the Garmin tools.**
-Quit Claude Desktop fully with `Cmd + Q` and reopen it. Closing the window
-leaves it running in the background.
+Quit Claude Desktop fully and reopen it. Closing the window leaves it running in
+the background -- on a Mac press `Cmd + Q`, on Windows quit it from the system
+tray icon.
 
 **"Your Garmin account is not connected yet."**
 Run `garmin-mcp-setup` in Terminal.
